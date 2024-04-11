@@ -1,4 +1,5 @@
-import { BrowserRouter as Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/login';
 import LogoutPage from './pages/logout';
 import RegisterPage from './pages/register';
@@ -8,11 +9,13 @@ function App() {
     
     <div>
       <h1>TESTING</h1>
-      <Routes>
-          <Route path="/login" element={<LoginPage />}/>
-          <Route path="logout" element={<LogoutPage/>}/>
-          <Route path="register" element={<RegisterPage/>}/>
-      </Routes>
+      <BrowserRouter>
+        <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="logout" element={<LogoutPage/>} />
+            <Route path="register" element={<RegisterPage/>} />
+          </Routes>
+      </BrowserRouter>
     </div>
   );
 }
