@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 api = Api(app)
@@ -15,6 +16,7 @@ db = SQLAlchemy(app)
 #Handling cross-origin requests
 CORS(app)
 
+bcrypt = Bcrypt(app)
 
 #User model for the database
 class User(db.Model):
@@ -33,7 +35,7 @@ class Register(Resource):
 
         name = data['name']
         email = data['email']
-        password = data['password']
+        password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
 
         user = User(name=name, email=email, password=password)
         db.session.add(user)
@@ -54,7 +56,7 @@ class Login(Resource):
         # Check if the user exists in the database
         user = User.query.filter_by(email=email).first()
 
-        if user and user.password == password:
+        if user and bcrypt.check_password_hash(user.password, password):
             # User authentication successful
             return {'message': 'Login successful'}, 200
         else:
